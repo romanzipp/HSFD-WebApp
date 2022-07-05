@@ -1,5 +1,7 @@
 # U8 XHR
 
+Subproject only contains requirements for TailwindCSS styles. JS is vanilla.
+
 ## Installation
 
 ```shell

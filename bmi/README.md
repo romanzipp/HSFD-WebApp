@@ -1,5 +1,7 @@
 # BMI
 
+Subproject runs with Vue & Tailwind.
+
 ## Project setup
 ```
 yarn install

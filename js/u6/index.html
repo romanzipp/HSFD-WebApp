@@ -1,0 +1,55 @@
+<html>
+<head>
+<!-- missing "e" -->
+<style>
+    .schiebbar { /* replace ID selector with class selector */
+        position: absolute; 
+        z-index: 1;
+        width: 150px;
+        height: 80px; 
+        left: 50px; 
+        top: 50px;
+        background-color: #F6E3CE; 
+        border: 2px solid black;
+    }
+</style> <!-- missing "e" -->
+
+</head>
+<body>
+    <div class="schiebbar" id="myDiv"></span>
+
+    <!-- moved script to body for DOM availability -->
+    <script>
+        "use strict";
+        var elem = document.getElementById("myDiv"); // redundant "s" in "getElementsById"
+        var dragging = false;
+        var lastX, lastY;
+        elem.addEventListener("mousedown", function(evt) { // replace "onmousedown" with "mousedown"
+            dragging = true;
+            lastX = evt.clientX;
+            lastY = evt.clientY;
+        }, false);
+    
+        elem.addEventListener("mousemove", function(evt) {
+            if (dragging) { // missing paranthesis
+                var style = window.getComputedStyle(elem, null);
+    
+                var posx = parseInt(style.getPropertyValue("left")); // missing paranthesis
+                var posy = parseInt(style.getPropertyValue("top"));
+                var x = evt.clientX;
+                var y = evt.clientY;
+                const dx = x - lastX; // Missing var declaration
+                const dy = y - lastY; // Missing var declaration
+                elem.style.left = (posx + dx) + "px"; // reorder paranthesis
+                elem.style.top = (posy + dy) + "px"; // replace "." with "+" & remove space
+                lastX = x;
+                lastY = y; // replace "x" with "y"
+            }
+        }, false);
+    
+        elem.addEventListener("mouseup", function(evt) { // replace "onmouseup" with "mouseup"
+            dragging = false;
+        }); // missing paranthesis and ;
+    </script>
+<body>
+</html>

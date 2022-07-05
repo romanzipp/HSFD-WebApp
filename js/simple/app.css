@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+section {
+    border-bottom: 1px solid black;
+    padding: 1rem;
+}
+
+section h2 {
+    margin-bottom: 2rem;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.num {
+    padding: 0 2px;
+    font-family: monospace;
+}

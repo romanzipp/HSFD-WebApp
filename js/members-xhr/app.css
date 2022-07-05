@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+table {
+    @apply text-left rounded-lg overflow-hidden
+}
+
+table thead tr {
+    @apply rounded-t-lg
+}
+
+table thead tr th {
+    @apply py-2 px-3 bg-gray-200 text-xs uppercase text-gray-600
+}
+
+table tbody td {
+    @apply py-2 px-3 bg-gray-100
+}
+
+table tbody td:last-child {
+    @apply rounded-b-lg
+}
+
+table tbody tr:not(:last-child) td {
+    @apply border-b border-gray-200
+}
+
+button {
+    @apply shadow px-3 py-1 bg-blue-500 text-white text-sm rounded mx-1 text-xs uppercase
+}
+
+h1 {
+    @apply mb-8 font-bold text-3xl
+}
+
+h2 {
+    @apply my-6 font-semibold text-2xl
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Members</title>
+    <link rel="stylesheet" href="dist/app.css">
+</head>
+<body class="font-sans p-4">
+
+    <h1>
+        Foobar e.V.
+    </h1>
+
+    <h2>
+        Available Members
+    </h2>
+
+    <button id="show-members">
+        Show members
+    </button>
+
+    <table id="available-members-table" class="hidden">
+        <thead>
+            <tr>
+                <th>Vorname</th>
+                <th>Name</th>
+                <th>E-Mail</th>
+                <th>Aktion</th>
+            </tr>
+        </thead>
+        <tbody id="available-members"></tbody>
+    </table>
+
+    <h2>
+        Active Members
+    </h2>
+
+    <ul id="active-members" class="list-disc pl-6"></ul>
+
+    <script src="app.js"></script>
+</body>
+</html>

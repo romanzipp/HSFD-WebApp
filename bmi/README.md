@@ -1,4 +1,4 @@
-# bmi
+# BMI
 
 ## Project setup
 ```

@@ -119,7 +119,7 @@ req.addEventListener('load', function () {
         email: item.Email,
     }));
 
-    console.log('Got members: `${data.length}`');
+    console.log(`Got members: ${data.length}`);
 
     renderLists();
 });

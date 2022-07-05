@@ -74,6 +74,10 @@
                         class="px-4 py-1 leading-normal shadow rounded-md bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-160">
                     HACKERMAN
                 </button>
+                <button @click="submitAjax"
+                        class="px-4 py-1 leading-normal shadow rounded-md bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-160">
+                    Absenden via AJAX
+                </button>
             </div>
 
         </div>
@@ -82,8 +86,13 @@
             Der BMI beträgt: {{ bmi }}
         </div>
 
-        <div v-show="!!queryString">
-            Query String: {{ queryString }}
+        <div v-show="!!queryString" class="mt-4 border p-2">
+            <u>Query String:</u> {{ queryString }}
+        </div>
+
+        <div v-show="response" class="mt-4 border p-2">
+            <u>Response:</u>
+            <span v-html="response"></span>
         </div>
     </div>
 
@@ -101,19 +110,21 @@ export default {
     },
 
     data: () => ({
-        weight: null,
-        height: null,
+        weight: 90,
+        height: 120,
         gender: null,
-        name: null,
-        mail: null,
-        comments: null,
+        name: 'Foo Bar',
+        mail: 'test@example.com',
+        comments: 'Foobar',
         genders: [
             { title: 'Männlich', name: 'm' },
             { title: 'Weiblich', name: 'f' },
             { title: 'Divers', name: 'd' }
         ],
+        query: null,
         queryString: null,
-        errors: {}
+        errors: {},
+        response:null
     }),
 
     computed: {
@@ -158,13 +169,25 @@ export default {
                 return;
             }
 
-            const qs = new URLSearchParams();
+            this.query = new URLSearchParams();
             for (const a in attrs) {
-                qs.append(a, attrs[a]);
+                this.query.append(a, attrs[a]);
             }
 
             this.errors = {};
-            this.queryString = qs.toString();
+            this.queryString = this.query.toString();
+        },
+        async submitAjax(){
+            this.submit();
+
+            console.log(this.queryString)
+
+            const query = new URLSearchParams({
+                gewicht: this.query.get('weight'),
+                groesse: this.query.get('height'),
+            });
+            const response = await fetch(`https://vulcan.informatik.hs-fulda.de/bmiRechnerAjax.php?${query}`);
+            this.response = await response.text();
         },
         insertXss() {
             // eslint-disable-next-line no-useless-escape

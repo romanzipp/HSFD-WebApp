@@ -1,8 +1,8 @@
 <template>
 
     <div>
-        <BodyMassIndex v-if="false" />
-        <RegistrationForm />
+        <BodyMassIndex v-if="true" />
+        <RegistrationForm v-if="false" />
     </div>
 
 </template>

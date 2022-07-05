@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-16" ?>
+<Items>
+    <Input weight="70" height="170" gender="2" name="John Doe" mail="john@example.com" comments="Foobar"></Input>
+    <Input weight="70" height="170" gender="2" name="John Doe" mail="john@example.com" comments="Foobar"></Input>
+    <Input weight="70" height="170" gender="2" name="John Doe" mail="john@example.com" comments="Foobar"></Input>
+</Items>

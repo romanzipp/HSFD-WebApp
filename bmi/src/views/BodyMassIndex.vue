@@ -1,0 +1,180 @@
+<template>
+
+    <div class="font-sans p-8 space-y-8">
+
+        <h1 class="text-3xl font-bold">
+            BMI Rechner
+        </h1>
+
+        <div class="relative border border-gray-500 shadow p-6 rounded-md space-y-6">
+
+            <BoxHeader>
+                Angaben zur BMI Berechnung
+            </BoxHeader>
+
+            <div class="flex flex-col space-y-4">
+
+                <FormField>
+                    <template #title>Gewicht</template>
+                    <input v-model="weight" type="number" placeholder="Gewicht (kg)" step="1" min="0" max="999" autofocus>
+                </FormField>
+
+                <FormField>
+                    <template #title>Größe</template>
+                    <input v-model="height" type="number" placeholder="Größe (m)" step="0.01" min="0" max="4">
+                </FormField>
+
+            </div>
+
+            <div class="relative flex space-x-4 py-6 px-4 border-gray-500 border rounded-md shadow">
+
+                <BoxHeader>
+                    Geschlecht
+                </BoxHeader>
+
+                <div v-for="g in genders" :key="g.name">
+                    <label :for="g.name" class="hover:cursor-pointer">
+                        <input v-model="gender" name="gender" type="radio" :id="g.name" :value="g.name">
+                        {{ g.title }}
+                    </label>
+                </div>
+
+            </div>
+
+            <div class="flex flex-col space-y-4">
+
+                <FormField>
+                    <template #title>Name</template>
+                    <input v-model="name" type="text" placeholder="Max Muster" :class="{ 'border-red-500': 'name' in errors }">
+                    <template #error v-if="'name' in errors">{{ errors.name }}</template>
+                </FormField>
+
+                <FormField>
+                    <template #title>E-Mail</template>
+                    <input v-model="mail" type="email" placeholder="foo@bar.com">
+                </FormField>
+
+                <FormField>
+                    <template #title>Anmerkungen</template>
+                    <textarea v-model="comments" rows="4" :class="{ 'border-red-500': 'comments' in errors }"></textarea>
+                    <template #error v-if="'comments' in errors">{{ errors.comments }}</template>
+                </FormField>
+            </div>
+
+            <div class="flex justify-end space-x-4">
+                <button @click="submit"
+                        class="px-4 py-1 leading-normal shadow rounded-md bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-160">
+                    Absenden
+                </button>
+                <button @click="reset"
+                        class="px-4 py-1 leading-normal shadow rounded-md bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-160">
+                    Zurücksetzen
+                </button>
+                <button @click="insertXss"
+                        class="px-4 py-1 leading-normal shadow rounded-md bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-160">
+                    HACKERMAN
+                </button>
+            </div>
+
+        </div>
+
+        <div v-show="bmi">
+            Der BMI beträgt: {{ bmi }}
+        </div>
+
+        <div v-show="!!queryString">
+            Query String: {{ queryString }}
+        </div>
+    </div>
+
+</template>
+
+<script>
+import BoxHeader from '../components/BoxHeader';
+import FormField from '../components/FormField';
+
+export default {
+
+    components: {
+        BoxHeader,
+        FormField
+    },
+
+    data: () => ({
+        weight: null,
+        height: null,
+        gender: null,
+        name: null,
+        mail: null,
+        comments: null,
+        genders: [
+            { title: 'Männlich', name: 'm' },
+            { title: 'Weiblich', name: 'f' },
+            { title: 'Divers', name: 'd' }
+        ],
+        queryString: null,
+        errors: {}
+    }),
+
+    computed: {
+        sanitizedHeight() {
+            return parseFloat(`${this.height}`.replace(',', '.'));
+        },
+        bmi() {
+            if (!this.weight || !this.sanitizedHeight || !this.gender) {
+                return null;
+            }
+
+            return Math.round(this.weight / Math.sqrt(this.sanitizedHeight));
+        }
+    },
+
+    methods: {
+        reset() {
+            this.weight = this.height = this.gender = this.name = this.mail = null;
+        },
+        submit() {
+            const attrs = {
+                weight: this.weight,
+                height: this.height,
+                gender: this.gender,
+                name: this.name,
+                mail: this.mail,
+                comments: this.comments
+            };
+
+            if (!attrs.name) {
+                this.errors.name = 'Missing';
+                return;
+            }
+
+            if (!attrs.name.match(/(?<first>[A-z][a-zöäü-]+) (?<last>[A-z][a-zöäü-]+)/)) {
+                this.errors.name = 'Falsches Format';
+                return;
+            }
+
+            if (this.getEscapedContent(attrs.comments) !== attrs.comments) {
+                this.errors.comments = 'Invalider Inhalt';
+                return;
+            }
+
+            const qs = new URLSearchParams();
+            for (const a in attrs) {
+                qs.append(a, attrs[a]);
+            }
+
+            this.errors = {};
+            this.queryString = qs.toString();
+        },
+        insertXss() {
+            // eslint-disable-next-line no-useless-escape
+            this.name = '<script>window.location.href=\'https://google.com\';<\/script>';
+        },
+        getEscapedContent(content) {
+            const div = document.createElement('div');
+            div.innerText = content;
+            return div.innerHTML;
+        }
+    }
+};
+</script>

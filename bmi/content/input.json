@@ -1,0 +1,20 @@
+{
+    "items": [
+        {
+            "weight": 70,
+            "height": 170,
+            "gender": 1,
+            "name": "John Doe",
+            "mail": "john@example.com",
+            "comments": "foobar"
+        },
+        {
+            "weight": 70,
+            "height": 170,
+            "gender": 1,
+            "name": "John Doe",
+            "mail": "john@example.com",
+            "comments": "foobar"
+        }
+    ]
+}

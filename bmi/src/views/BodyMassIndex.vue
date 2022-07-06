@@ -147,7 +147,7 @@ export default {
         reset() {
             this.weight = this.height = this.gender = this.name = this.mail = null;
         },
-        submit() {
+        submit(validate = true) {
             const attrs = {
                 weight: this.weight,
                 height: this.height,
@@ -157,19 +157,21 @@ export default {
                 comments: this.comments
             };
 
-            if (!attrs.name) {
-                this.errors.name = 'Missing';
-                return;
-            }
+            if (validate) {
+                if (!attrs.name) {
+                    this.errors.name = 'Missing';
+                    return;
+                }
 
-            if (!attrs.name.match(/(?<first>[A-z][a-zöäü-]+) (?<last>[A-z][a-zöäü-]+)/)) {
-                this.errors.name = 'Falsches Format';
-                return;
-            }
+                if (!attrs.name.match(/(?<first>[A-z][a-zöäü-]+) (?<last>[A-z][a-zöäü-]+)/)) {
+                    this.errors.name = 'Falsches Format';
+                    return;
+                }
 
-            if (this.getEscapedContent(attrs.comments) !== attrs.comments) {
-                this.errors.comments = 'Invalider Inhalt';
-                return;
+                if (this.getEscapedContent(attrs.comments) !== attrs.comments) {
+                    this.errors.comments = 'Invalider Inhalt';
+                    return;
+                }
             }
 
             this.query = new URLSearchParams();
@@ -181,14 +183,17 @@ export default {
             this.queryString = this.query.toString();
         },
         async submitAjax(){
-            this.submit();
+            this.submit(false);
 
             console.log(this.queryString)
 
             const query = new URLSearchParams({
                 gewicht: this.query.get('weight'),
                 groesse: this.query.get('height'),
+                name: this.query.get('name'),
+                anmerkung: this.query.get('comments'),
             });
+
             const response = await fetch(`${endpoint}?${query}`);
             this.response = await response.text();
         },

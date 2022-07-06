@@ -2,6 +2,7 @@
 
 const http = require('http');
 const url = require('url');
+const fs = require('fs');
 
 const host = 'localhost';
 const port = 8000;
@@ -19,16 +20,33 @@ const validate = (data) => {
         throw new Error('Anmerkungen sind erforderlich');
     }
 
-    if (isHtml(data.comments)){
+    if (isHtml(data.comments)) {
         throw new Error('Anmerkungen sind nicht zulässig');
     }
+};
+
+const appendToFile = (data) => {
+    const name = 'requests.csv';
+
+    if (!fs.existsSync(name)) {
+        fs.writeFileSync(name, ['Gewicht', 'Größe', 'Name', 'Anmerkungen', 'Geschlecht', 'E-Mail'].join(';') + '\n');
+    }
+
+    fs.appendFileSync(name, Object.values(data).map(str => str.replace(';', ',')).join(';') + '\n');
 };
 
 const server = http.createServer((req, res) => {
     const data = url.parse(req.url);
     const params = new URLSearchParams(data.search);
 
-    const [weight, size, name, comments] = [params.get('gewicht'), params.get('groesse'), params.get('name'), params.get('anmerkung')];
+    const [weight, size, name, comments, gender, mail] = [
+        params.get('gewicht'),
+        params.get('groesse'),
+        params.get('name'),
+        params.get('anmerkung'),
+        params.get('geschlecht'),
+        params.get('mail')
+    ];
 
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'text/html');
@@ -37,6 +55,8 @@ const server = http.createServer((req, res) => {
         validate({ weight, size, name, comments });
 
         const bmi = weight / size * size;
+
+        appendToFile({ weight, size, name, comments, gender, mail });
 
         res.writeHead(200);
         res.end(`BMI: <b>${bmi}</b>, Name: <b>${name}</b>, Anmerkungen: <b>${comments}</b>`);

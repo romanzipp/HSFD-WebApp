@@ -192,6 +192,8 @@ export default {
                 groesse: this.query.get('height'),
                 name: this.query.get('name'),
                 anmerkung: this.query.get('comments'),
+                geschlecht: this.query.get('gender'),
+                mail: this.query.get('mail'),
             });
 
             const response = await fetch(`${endpoint}?${query}`);

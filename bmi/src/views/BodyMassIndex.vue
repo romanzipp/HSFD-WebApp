@@ -102,6 +102,9 @@
 import BoxHeader from '../components/BoxHeader';
 import FormField from '../components/FormField';
 
+// const endpoint = 'https://vulcan.informatik.hs-fulda.de/bmiRechnerAjax.php';
+const endpoint = 'http://localhost:8000';
+
 export default {
 
     components: {
@@ -186,7 +189,7 @@ export default {
                 gewicht: this.query.get('weight'),
                 groesse: this.query.get('height'),
             });
-            const response = await fetch(`https://vulcan.informatik.hs-fulda.de/bmiRechnerAjax.php?${query}`);
+            const response = await fetch(`${endpoint}?${query}`);
             this.response = await response.text();
         },
         insertXss() {
